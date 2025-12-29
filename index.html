@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kashiwada-san Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="chat-app">
+
+  <!-- HEADER -->
+  <div class="chat-header">
+    <div class="header-left">
+      <img src="https://files.catbox.moe/st92mk.jpg">
+      <div class="header-text">
+        <h2>Kashiwada-san</h2>
+        <span class="status online" id="botStatus">
+          <i class="fa-solid fa-circle"></i> online
+        </span>
+      </div>
+    </div>
+    <div class="header-right" onclick="openInfo()">
+      <i class="fa-solid fa-ellipsis-vertical"></i>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-body" id="chat"></div>
+
+  <!-- INPUT -->
+  <div class="chat-input">
+    <textarea id="msg" placeholder="Ketik pesan..."></textarea>
+    <button onclick="send()">
+      <i class="fa-solid fa-paper-plane"></i>
+    </button>
+  </div>
+</div>
+
+<!-- INFO MODAL -->
+<div class="info-modal" id="infoModal">
+  <div class="info-box">
+    <img src="https://files.catbox.moe/st92mk.jpg">
+    <h3><i class="fa-solid fa-robot"></i> Kashiwada-san</h3>
+
+    <div class="info-list">
+      <p><i class="fa-solid fa-code"></i> Nama: <b>R Aja</b></p>
+      <p><i class="fa-solid fa-phone"></i> Nomor: <b>+62 815-4942-6361</b></p>
+      <p><i class="fa-solid fa-layer-group"></i> Version: <b>v1.0</b></p>
+      <p><i class="fa-solid fa-circle-info"></i> Info: <b>Hiburan & eksperimen</b></p>
+    </div>
+
+    <button onclick="closeInfo()">Tutup</button>
+    <button class="danger" onclick="clearChat()">Clear Chat</button>
+  </div>
+</div>
+
+<script>
+const chat = document.getElementById("chat");
+const msg = document.getElementById("msg");
+const statusEl = document.getElementById("botStatus");
+
+window.onload = () => {
+  const saved = localStorage.getItem("chatHistory");
+  if (saved) {
+    chat.innerHTML = saved;
+  } else {
+    chat.innerHTML = `
+      <div class="row bot">
+        <img src="https://files.catbox.moe/st92mk.jpg">
+        <div>
+          <div class="name">Kashiwada-san</div>
+          <div class="bubble bot">
+            Selamat datang.<br><br>
+            Saya <b>Kashiwada-san</b>, asisten virtual yang siap membantu Anda.
+            Silakan sampaikan pertanyaan Anda dengan sopan dan jelas.<br><br>
+            Layanan ini dibuat untuk keperluan hiburan dan eksperimen.
+          </div>
+        </div>
+      </div>
+    `;
+    saveChat();
+  }
+  chat.scrollTop = chat.scrollHeight;
+};
+
+function saveChat(){
+  localStorage.setItem("chatHistory", chat.innerHTML);
+}
+
+function setStatus(type,text){
+  statusEl.className = "status " + type;
+  statusEl.innerHTML = `<i class="fa-solid fa-circle"></i> ${text}`;
+}
+
+async function send(){
+  const text = msg.value.trim();
+  if(!text) return;
+
+  chat.innerHTML += `
+    <div class="row user">
+      <div class="bubble user">${text}</div>
+    </div>`;
+  msg.value="";
+  saveChat();
+
+  setStatus("busy","mengetik");
+
+  const typing=document.createElement("div");
+  typing.className="row bot";
+  typing.innerHTML=`
+    <img src="https://files.catbox.moe/st92mk.jpg">
+    <div>
+      <div class="name">Kashiwada-san</div>
+      <div class="bubble bot typing">mengetik...</div>
+    </div>`;
+  chat.appendChild(typing);
+
+  try{
+    const res=await fetch(
+      "https://api.ootaizumi.web.id/character/kashiwada-san?message="+encodeURIComponent(text)
+    );
+    const data=await res.json();
+    typing.remove();
+
+    chat.innerHTML+=`
+      <div class="row bot">
+        <img src="https://files.catbox.moe/st92mk.jpg">
+        <div>
+          <div class="name">Kashiwada-san</div>
+          <div class="bubble bot">${data.message}</div>
+        </div>
+      </div>`;
+    setStatus("online","online");
+    saveChat();
+  }catch{
+    setStatus("offline","offline");
+  }
+}
+
+msg.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){
+    e.preventDefault();
+    send();
+  }
+});
+
+function openInfo(){ infoModal.style.display="flex"; }
+function closeInfo(){ infoModal.style.display="none"; }
+
+function clearChat(){
+  chat.innerHTML="";
+  localStorage.removeItem("chatHistory");
+  closeInfo();
+}
+</script>
+
+</body>
+</html>
