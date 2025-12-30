@@ -1,12 +1,18 @@
+<!--
+JANGAN HAPUS WM BANG :V
+# Author: Rafz
+# Fitur: Dual AI Web Chat
+-->
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Kashiwada-san Chat</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Dual AI Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -14,151 +20,206 @@
 
 <div class="chat-app">
 
-  <!-- HEADER -->
-  <div class="chat-header">
-    <div class="header-left">
-      <img src="https://files.catbox.moe/st92mk.jpg">
-      <div class="header-text">
-        <h2>Kashiwada-san</h2>
-        <span class="status online" id="botStatus">
-          <i class="fa-solid fa-circle"></i> online
-        </span>
-      </div>
-    </div>
-    <div class="header-right" onclick="openInfo()">
-      <i class="fa-solid fa-ellipsis-vertical"></i>
-    </div>
+<!-- HEADER -->
+<div class="chat-header">
+ <div class="header-left">
+  <!-- GANTI URL AVATAR HEADER BOT -->
+  <img id="botAvatar" src="kiss.jpg">
+  <div>
+   <b id="botName">Kashiwada-san</b>
+   <div class="status">online</div>
   </div>
-
-  <!-- CHAT -->
-  <div class="chat-body" id="chat"></div>
-
-  <!-- INPUT -->
-  <div class="chat-input">
-    <textarea id="msg" placeholder="Ketik pesan..."></textarea>
-    <button onclick="send()">
-      <i class="fa-solid fa-paper-plane"></i>
-    </button>
-  </div>
+ </div>
+ <div class="header-right" onclick="openDrawer()">☰</div>
 </div>
 
-<!-- INFO MODAL -->
-<div class="info-modal" id="infoModal">
-  <div class="info-box">
-    <img src="https://files.catbox.moe/st92mk.jpg">
-    <h3><i class="fa-solid fa-robot"></i> Kashiwada-san</h3>
+<!-- CHAT -->
+<div class="chat-body" id="chat"></div>
 
-    <div class="info-list">
-      <p><i class="fa-solid fa-code"></i> Nama: <b>R Aja</b></p>
-      <p><i class="fa-solid fa-phone"></i> Nomor: <b>+62 815-4942-6361</b></p>
-      <p><i class="fa-solid fa-layer-group"></i> Version: <b>v1.0</b></p>
-      <p><i class="fa-solid fa-circle-info"></i> Info: <b>Hiburan & eksperimen</b></p>
-    </div>
+<!-- INPUT -->
+<div class="chat-input">
+ <div class="input-box">
+  <textarea id="msg" rows="1" placeholder="Ketik pesan..."></textarea>
+  <button onclick="send()">
+   <i class="fa-solid fa-paper-plane"></i>
+  </button>
+ </div>
+</div>
+</div>
 
-    <button onclick="closeInfo()">Tutup</button>
-    <button class="danger" onclick="clearChat()">Clear Chat</button>
+<!-- DRAWER -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+
+<div class="drawer" id="drawer">
+ <h3>Pilih Model</h3>
+
+ <div class="model-card active" onclick="setAI('kashiwada',this)">
+  <!-- GANTI URL AVATAR KASHIWADA -->
+  <img src="kiss.jpg">
+  <div class="model-name">Kashiwada</div>
+ </div>
+
+ <div class="model-card" onclick="setAI('mahiru',this)">
+  <!-- GANTI URL AVATAR MAHIRU -->
+  <img src="https://files.catbox.moe/0ozdxa.jpg">
+  <div class="model-name">Shiina Mahiru</div>
+ </div>
+
+ <div class="model-card new-model" onclick="setAI('felo',this)">
+  <!-- GANTI URL AVATAR FELO -->
+  <img src="https://files.catbox.moe/xzv3ph.jpg">
+  <div class="model-name">
+   Felo AI
+   <span class="badge-new">NEW</span>
   </div>
+ </div>
+
+ <div class="model-info" id="modelInfo">
+  <i class="fa-solid fa-circle-info"></i>
+  <span>Tenang, sopan, cocok untuk ngobrol santai & diskusi ringan.</span>
+ </div>
+
+ <hr>
+ <button class="close-btn" onclick="openInfo()">Info Owner</button>
+</div>
+
+<!-- INFO OWNER -->
+<div class="info-modal" id="infoModal" onclick="closeInfo()">
+ <div class="glass" onclick="event.stopPropagation()">
+  <!-- GANTI URL AVATAR OWNER -->
+  <img src="https://files.catbox.moe/6kz56d.jpg" class="owner-avatar">
+  <h3>Rafz Aja</h3>
+  <p>Pemula tapi niat 🔥</p>
+
+  <div class="social">
+   <a class="social-btn" href="https://youtube.com/@xyraa34k">YouTube</a>
+   <a class="social-btn" href="https://wa.me/6281649426361">WhatsApp</a>
+  </div>
+
+  <button class="close-btn" onclick="closeInfo()">Tutup</button>
+ </div>
 </div>
 
 <script>
-const chat = document.getElementById("chat");
-const msg = document.getElementById("msg");
-const statusEl = document.getElementById("botStatus");
+const chat=document.getElementById("chat")
+const msg=document.getElementById("msg")
+const drawer=document.getElementById("drawer")
+const overlay=document.getElementById("overlay")
+const botName=document.getElementById("botName")
+const botAvatar=document.getElementById("botAvatar")
+const modelInfo=document.getElementById("modelInfo")
 
-window.onload = () => {
-  const saved = localStorage.getItem("chatHistory");
-  if (saved) {
-    chat.innerHTML = saved;
-  } else {
-    chat.innerHTML = `
-      <div class="row bot">
-        <img src="https://files.catbox.moe/st92mk.jpg">
-        <div>
-          <div class="name">Kashiwada-san</div>
-          <div class="bubble bot">
-            Selamat datang.<br><br>
-            Saya <b>Kashiwada-san</b>, asisten virtual yang siap membantu Anda.
-            Silakan sampaikan pertanyaan Anda dengan sopan dan jelas.<br><br>
-            Layanan ini dibuat untuk keperluan hiburan dan eksperimen. Mungkin Masih Banyak Bug Jadi Maklumin Ajah
-          </div>
-        </div>
-      </div>
-    `;
-    saveChat();
-  }
-  chat.scrollTop = chat.scrollHeight;
-};
-
-function saveChat(){
-  localStorage.setItem("chatHistory", chat.innerHTML);
+function openDrawer(){
+ drawer.classList.add("active")
+ overlay.classList.add("active")
+}
+function closeDrawer(){
+ drawer.classList.remove("active")
+ overlay.classList.remove("active")
 }
 
-function setStatus(type,text){
-  statusEl.className = "status " + type;
-  statusEl.innerHTML = `<i class="fa-solid fa-circle"></i> ${text}`;
+function formatText(t){
+ t=t.replace(/\*\*|\*/g,"")
+ t=t.replace(/```([\s\S]*?)```/g,(m,c)=>`
+ <div class="code-wrapper">
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <pre><code>${c}</code></pre>
+ </div>`)
+ return t.replace(/\n/g,"<br>")
+}
+
+function copyCode(b){
+ navigator.clipboard.writeText(b.nextElementSibling.innerText)
+ b.innerText="✔"
+ setTimeout(()=>b.innerText="Copy",1200)
+}
+
+/* ===== AI LIST (GANTI URL AVATAR DI SINI JUGA) ===== */
+const AIs={
+ kashiwada:{
+  name:"Kashiwada-san",
+  avatar:"kiss.jpg",
+  info:"Tenang, sopan, cocok untuk ngobrol santai & diskusi ringan.",
+  api:t=>"https://api.ootaizumi.web.id/character/kashiwada-san?message="+encodeURIComponent(t),
+  parse:d=>d.message
+ },
+ mahiru:{
+  name:"Shiina Mahiru",
+  avatar:"https://files.catbox.moe/0ozdxa.jpg",
+  info:"Manis, perhatian, cocok buat curhat & ngobrol harian.",
+  api:t=>"https://api.ryuu-dev.offc.my.id/ai/mahiru-ai?text="+encodeURIComponent(t),
+  parse:d=>d.output
+ },
+ felo:{
+  name:"Felo AI",
+  avatar:"https://files.catbox.moe/xzv3ph.jpg",
+  info:"Santai, fleksibel, cocok buat ngobrol bebas & random.",
+  api:t=>"https://api.ryuu-dev.offc.my.id/ai/felo?text="+encodeURIComponent(t),
+  parse:d=>d.result||d.output||d.message
+ }
+}
+
+let current="kashiwada"
+
+function add(role,text){
+ chat.innerHTML+=`
+ <div class="row ${role}">
+  <!-- GANTI URL AVATAR USER JIKA MAU -->
+  <img src="${role==='bot'?AIs[current].avatar:'user.jpg'}">
+  <div class="msg-box">
+   <div class="msg-name">${role==='bot'?AIs[current].name:'Kamu'}</div>
+   <div class="bubble ${role}">${text}</div>
+  </div>
+ </div>`
+ chat.scrollTop=chat.scrollHeight
 }
 
 async function send(){
-  const text = msg.value.trim();
-  if(!text) return;
+ const t=msg.value.trim()
+ if(!t)return
 
-  chat.innerHTML += `
-    <div class="row user">
-      <div class="bubble user">${text}</div>
-    </div>`;
-  msg.value="";
-  saveChat();
+ add("user",t)
+ msg.value=""
 
-  setStatus("busy","mengetik");
+ chat.innerHTML+=`
+ <div class="row bot" id="typing">
+  <img src="${AIs[current].avatar}">
+  <div class="typing">
+   <span></span><span></span><span></span>
+  </div>
+ </div>`
+ chat.scrollTop=chat.scrollHeight
 
-  const typing=document.createElement("div");
-  typing.className="row bot";
-  typing.innerHTML=`
-    <img src="https://files.catbox.moe/st92mk.jpg">
-    <div>
-      <div class="name">Kashiwada-san</div>
-      <div class="bubble bot typing">mengetik...</div>
-    </div>`;
-  chat.appendChild(typing);
-
-  try{
-    const res=await fetch(
-      "https://api.ootaizumi.web.id/character/kashiwada-san?message="+encodeURIComponent(text)
-    );
-    const data=await res.json();
-    typing.remove();
-
-    chat.innerHTML+=`
-      <div class="row bot">
-        <img src="https://files.catbox.moe/st92mk.jpg">
-        <div>
-          <div class="name">Kashiwada-san</div>
-          <div class="bubble bot">${data.message}</div>
-        </div>
-      </div>`;
-    setStatus("online","online");
-    saveChat();
-  }catch{
-    setStatus("offline","offline");
-  }
+ try{
+  const r=await fetch(AIs[current].api(t))
+  const d=await r.json()
+  document.getElementById("typing").remove()
+  add("bot",formatText(AIs[current].parse(d)))
+ }catch{
+  document.getElementById("typing").remove()
+  add("bot","⚠️ API error / limit")
+ }
 }
 
-msg.addEventListener("keydown",e=>{
-  if(e.key==="Enter"&&!e.shiftKey){
-    e.preventDefault();
-    send();
-  }
-});
+function setAI(k,el){
+ current=k
+ botName.innerText=AIs[k].name
+ botAvatar.src=AIs[k].avatar
+ modelInfo.innerHTML=`<i class="fa-solid fa-circle-info"></i><span>${AIs[k].info}</span>`
 
-function openInfo(){ infoModal.style.display="flex"; }
-function closeInfo(){ infoModal.style.display="none"; }
+ document.querySelectorAll(".model-card").forEach(x=>x.classList.remove("active"))
+ el.classList.add("active")
+ closeDrawer()
+ chat.innerHTML=""
+}
 
-function clearChat(){
-  chat.innerHTML="";
-  localStorage.removeItem("chatHistory");
-  closeInfo();
+function openInfo(){
+ closeDrawer()
+ document.getElementById("infoModal").style.display="flex"
+}
+function closeInfo(){
+ document.getElementById("infoModal").style.display="none"
 }
 </script>
-
 </body>
 </html>
