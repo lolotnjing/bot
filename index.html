@@ -61,13 +61,13 @@ JANGAN HAPUS WM BANG :V
 
  <div class="model-card" onclick="setAI('mahiru',this)">
   <!-- GANTI URL AVATAR MAHIRU -->
-  <img src="https://files.catbox.moe/0ozdxa.jpg">
+  <img src="mahiru.jpg">
   <div class="model-name">Shiina Mahiru</div>
  </div>
 
  <div class="model-card new-model" onclick="setAI('felo',this)">
   <!-- GANTI URL AVATAR FELO -->
-  <img src="https://files.catbox.moe/xzv3ph.jpg">
+  <img src="felo.jpg">
   <div class="model-name">
    Felo AI
    <span class="badge-new">NEW</span>
@@ -87,7 +87,7 @@ JANGAN HAPUS WM BANG :V
 <div class="info-modal" id="infoModal" onclick="closeInfo()">
  <div class="glass" onclick="event.stopPropagation()">
   <!-- GANTI URL AVATAR OWNER -->
-  <img src="https://files.catbox.moe/6kz56d.jpg" class="owner-avatar">
+  <img src="owner.jpg" class="owner-avatar">
   <h3>Rafz Aja</h3>
   <p>Pemula tapi niat 🔥</p>
 
@@ -145,14 +145,14 @@ const AIs={
  },
  mahiru:{
   name:"Shiina Mahiru",
-  avatar:"https://files.catbox.moe/0ozdxa.jpg",
+  avatar:"mahiru.jpg",
   info:"Manis, perhatian, cocok buat curhat & ngobrol harian.",
   api:t=>"https://api.ryuu-dev.offc.my.id/ai/mahiru-ai?text="+encodeURIComponent(t),
   parse:d=>d.output
  },
  felo:{
   name:"Felo AI",
-  avatar:"https://files.catbox.moe/xzv3ph.jpg",
+  avatar:"felo.jpg",
   info:"Santai, fleksibel, cocok buat ngobrol bebas & random.",
   api:t=>"https://api.ryuu-dev.offc.my.id/ai/felo?text="+encodeURIComponent(t),
   parse:d=>d.result||d.output||d.message
