@@ -1,10 +1,10 @@
 *{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
 
 body{
  background:#0f172a;
  color:#e5e7eb;
  font-family:system-ui,sans-serif;
- height:100vh;
  display:flex;
  justify-content:center;
  overflow:hidden;
@@ -22,7 +22,7 @@ body{
 .chat-app{
  width:100%;
  max-width:420px;
- height:100vh;
+ height:100dvh;
  background:#020617;
  display:flex;
  flex-direction:column;
@@ -67,7 +67,13 @@ body{
 }
 
 /* TYPING */
-.typing{display:flex;gap:6px;padding:10px 14px;background:#1e293b;border-radius:16px}
+.typing{
+ display:flex;
+ gap:6px;
+ padding:10px 14px;
+ background:#1e293b;
+ border-radius:16px;
+}
 .typing span{
  width:6px;height:6px;
  background:#94a3b8;
@@ -80,8 +86,16 @@ body{
  100%{opacity:.2}
 }
 
-/* INPUT */
-.chat-input{padding:10px;border-top:1px solid #1e293b}
+/* INPUT FIX */
+.chat-input{
+ position:sticky;
+ bottom:0;
+ background:#020617;
+ padding:10px;
+ padding-bottom:env(safe-area-inset-bottom);
+ border-top:1px solid #1e293b;
+ z-index:5;
+}
 .input-box{
  display:flex;
  gap:8px;
@@ -97,6 +111,10 @@ body{
  color:white;
  outline:none;
  padding:8px;
+ resize:none;
+ min-height:38px;
+ max-height:120px;
+ overflow-y:auto;
 }
 .input-box button{
  width:38px;height:38px;
@@ -236,15 +254,9 @@ body{
  padding:12px 16px;
  border-radius:14px;
  font-size:12px;
- color:#e5e7eb;
- display:flex;
- gap:8px;
- align-items:center;
  opacity:0;
- pointer-events:none;
  transition:.3s;
  z-index:99;
- box-shadow:0 10px 30px #00000066;
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.success{border-color:#22c55e}
