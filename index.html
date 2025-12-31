@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Multi Ai By Rafz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="chat-app">
+
+<div class="chat-header">
+ <div class="header-left">
+  <img id="botAvatar" src="kiss.jpg">
+  <div>
+   <b id="botName">Kashiwada-san</b>
+   <div class="status">online</div>
+  </div>
+ </div>
+ <div class="header-right" onclick="openDrawer()">☰</div>
+</div>
+
+<div class="chat-body" id="chat"></div>
+
+<div class="chat-input">
+ <div class="input-box">
+  <textarea id="msg" rows="1" placeholder="Ketik pesan..."></textarea>
+  <button onclick="send()"><i class="fa-solid fa-paper-plane"></i></button>
+ </div>
+</div>
+</div>
+
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+ <h3>Pilih Model</h3>
+
+ <div class="model-card active" onclick="setAI('kashiwada',this)">
+  <img src="kiss.jpg"> Kashiwada
+ </div>
+ <div class="model-card" onclick="setAI('mahiru',this)">
+  <img src="mahiru.jpg"> Mahiru
+ </div>
+ <div class="model-card" onclick="setAI('felo',this)">
+  <img src="felo.jpg"> Felo <span class="badge-new">NEW</span>
+ </div>
+
+ <div class="model-info" id="modelInfo"></div>
+ <div class="user-memory" id="userMemory"></div>
+
+ <h3>Profil Kamu</h3>
+ <div class="user-profile">
+  <div class="avatar-picker" onclick="pickAvatar()">
+   <img id="userAvatarPreview" src="user.jpg">
+  </div>
+  <input type="file" id="userAvatarInput" accept="image/*">
+  <input type="text" id="userNameInput" placeholder="Nama kamu">
+  <button class="save-profile" onclick="saveProfile()">Simpan Profil</button>
+ </div>
+
+ <!-- ===== INFO OWNER (TAMBAHAN) ===== -->
+ <h3>Info Pengembang</h3>
+ <div class="owner-card">
+  <div class="owner-head">
+   <img src="developer.jpg">
+   <div>
+     
+   </span>
+    <b>Rafz <span class="badge verified">
+    <i class="fa-solid fa-circle-check"></i> </b>
+   </div>
+  </div>
+  
+  
+   <p><h5>
+   Multi AI Chat buatan orang gabut 
+   Hanya Untuk Experiment Dan Hiburan
+   </p></h5>
+   <p><h2>tqto</h2></p>
+   <p><h5>Acap Friends</h5></p>
+   <p><h5>Varhad Friends</h5></p>
+   <p><h5>Penyedia Api</h5></p>
+   
+  </p>
+
+ <div class="owner-social">
+  <a href="https://wa.me/6281549426361" target="_blank" rel="noopener">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <a href="https://www.youtube.com/@xyraa34k" target="_blank" rel="noopener">
+    <i class="fa-brands fa-youtube"></i>
+  </a>
+
+  <a href="https://nekopoi-care-rho.vercel.app/" target="_blank" rel="noopener">
+    <i class="fa-solid fa-globe"></i>
+  </a>
+</div>
+ </div>
+
+ <button class="close-btn" onclick="closeDrawer()">Tutup</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ===== NOTICE INFO PAS MASUK ===== -->
+<div class="login-notice" id="loginNotice">
+ <div class="notice-box">
+  <i class="fa-solid fa-circle-info notice-icon"></i>
+  <h3>Informasi</h3>
+  <p>
+   Chat ini <b>bersifat sementara</b>.<br>
+   Riwayat pesan akan hilang jika halaman ditutup atau direfresh.
+  </p>
+  <p><b>Laporkan jika ada bug 🙏</b></p>
+  <button onclick="closeNotice()">Mengerti</button>
+ </div>
+</div>
+
+<script>
+const chat=document.getElementById("chat")
+const msg=document.getElementById("msg")
+
+/* ===== NOTICE LOGIC (AUTO CLOSE 5 DETIK) ===== */
+const loginNotice=document.getElementById("loginNotice")
+if(!sessionStorage.getItem("noticeShown")){
+ loginNotice.classList.add("show")
+ sessionStorage.setItem("noticeShown","yes")
+ setTimeout(()=>closeNotice(),5000)
+}
+function closeNotice(){
+ loginNotice.classList.remove("show")
+}
+
+/* ===== FORMAT TEXT ===== */
+function formatText(t){
+ return t
+  .replace(/</g,"&lt;").replace(/>/g,"&gt;")
+  .replace(/\*\*(.*?)\*\*/g,"$1")
+  .replace(/\*(.*?)\*/g,"$1")
+  .replace(/`([^`]+)`/g,"$1")
+  .replace(/\n/g,"<br>")
+}
+
+/* ===== USER ===== */
+let userName=localStorage.getItem("userName")||"Kamu"
+let userAvatar=localStorage.getItem("userAvatar")||"user.jpg"
+const userNameInput=document.getElementById("userNameInput")
+const userAvatarInput=document.getElementById("userAvatarInput")
+const userAvatarPreview=document.getElementById("userAvatarPreview")
+userNameInput.value=userName
+userAvatarPreview.src=userAvatar
+
+function pickAvatar(){userAvatarInput.click()}
+userAvatarInput.onchange=()=>{
+ const f=userAvatarInput.files[0]
+ if(!f) return
+ const r=new FileReader()
+ r.onload=e=>userAvatarPreview.src=e.target.result
+ r.readAsDataURL(f)
+}
+
+/* ===== TOAST ===== */
+function showToast(t){
+ const toast=document.getElementById("toast")
+ toast.textContent=t
+ toast.classList.add("show")
+ setTimeout(()=>toast.classList.remove("show"),2500)
+}
+
+function saveProfile(){
+ userName=userNameInput.value||"Kamu"
+ userAvatar=userAvatarPreview.src
+ localStorage.setItem("userName",userName)
+ localStorage.setItem("userAvatar",userAvatar)
+ showToast("Profil disimpan")
+ closeDrawer()
+}
+
+/* ===== DRAWER ===== */
+const drawer=document.getElementById("drawer")
+const overlay=document.getElementById("overlay")
+function openDrawer(){drawer.classList.add("active");overlay.classList.add("active")}
+function closeDrawer(){drawer.classList.remove("active");overlay.classList.remove("active")}
+
+/* ===== AI (UTUH, TIDAK DISENTUH) ===== */
+const AIs={
+ kashiwada:{name:"Kashiwada-san",avatar:"kiss.jpg",info:"Tenang & sopan",
+ api:t=>`https://api.ootaizumi.web.id/character/kashiwada-san?message=${encodeURIComponent(t)}`,
+ parse:d=>d.message},
+ mahiru:{name:"Shiina Mahiru",avatar:"mahiru.jpg",info:"Manis & perhatian",
+ api:t=>`https://api.ryuu-dev.offc.my.id/ai/mahiru-ai?text=${encodeURIComponent(t)}`,
+ parse:d=>d.output},
+ felo:{name:"Felo",avatar:"felo.jpg",info:"Santai & bebas",
+ api:t=>`https://api.ryuu-dev.offc.my.id/ai/felo?text=${encodeURIComponent(t)}`,
+ parse:d=>d.result||d.output||d.message}
+}
+let current="kashiwada"
+modelInfo.innerText=AIs[current].info
+
+function add(role,text){
+ chat.innerHTML+=`
+ <div class="row ${role}">
+  <img src="${role==='bot'?AIs[current].avatar:userAvatar}">
+  <div class="msg-box">
+   <div class="msg-name">${role==='bot'?AIs[current].name:userName}</div>
+   <div class="bubble ${role}">${text}</div>
+  </div>
+ </div>`
+ chat.scrollTop=chat.scrollHeight
+}
+
+async function send(){
+ const t=msg.value.trim()
+ if(!t) return
+ add("user",t)
+ msg.value=""
+
+ chat.innerHTML+=`
+ <div class="row bot" id="typing">
+  <img src="${AIs[current].avatar}">
+  <div class="typing"><span></span><span></span><span></span></div>
+ </div>`
+ chat.scrollTop=chat.scrollHeight
+
+ try{
+  const r=await fetch(AIs[current].api(t))
+  const d=await r.json()
+  document.getElementById("typing").remove()
+  add("bot",formatText(AIs[current].parse(d)))
+ }catch{
+  document.getElementById("typing").remove()
+  add("bot","Terjadi kesalahan")
+ }
+}
+
+function setAI(k,el){
+ current=k
+ botName.innerText=AIs[k].name
+ botAvatar.src=AIs[k].avatar
+ modelInfo.innerText=AIs[k].info
+ document.querySelectorAll(".model-card").forEach(x=>x.classList.remove("active"))
+ el.classList.add("active")
+ closeDrawer()
+ chat.innerHTML=""
+}
+</script>
+
+</body>
+</html>
