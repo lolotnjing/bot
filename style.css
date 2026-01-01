@@ -368,3 +368,378 @@ button:focus-visible{
 .owner-social a:hover{
  color:#60a5fa;
 }
+.char-gallery{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
+ margin:10px 0;
+}
+.char-gallery img{
+ width:100%;
+ aspect-ratio:1/1;
+ object-fit:cover;
+ border-radius:12px;
+ border:1px solid #1e293b;
+ cursor:pointer;
+ transition:.25s;
+}
+.char-gallery img:hover{
+ transform:scale(1.05);
+ box-shadow:0 0 0 1px #2563eb;
+}
+.gallery-preview{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.7);
+ backdrop-filter:blur(4px);
+ display:none;
+ align-items:center;
+ justify-content:center;
+ z-index:50;
+}
+.gallery-preview.active{display:flex}
+.gallery-preview img{
+ max-width:85%;
+ max-height:85%;
+ border-radius:18px;
+ border:2px solid #2563eb;
+}
+/* =====================================================
+   🚀 UI PREMIUM ADD-ON (AMAN, TAMBAHAN SAJA)
+   ===================================================== */
+
+/* ===== APP DEPTH ===== */
+.chat-app{
+ border-radius:22px 22px 0 0;
+ box-shadow:
+  0 0 0 1px #1e293b,
+  0 40px 80px #020617;
+ overflow:hidden;
+}
+
+/* ===== HEADER LEBIH HIDUP ===== */
+.chat-header{
+ background:rgba(2,6,23,.8);
+ backdrop-filter:blur(10px);
+ box-shadow:0 6px 20px #020617aa;
+}
+
+/* ===== BOT AVATAR AURA WARNA ===== */
+#botAvatar{
+ position:relative;
+ z-index:1;
+}
+
+/* ring warna */
+#botAvatar::before{
+ content:"";
+ position:absolute;
+ inset:-3px;
+ border-radius:50%;
+ background:
+  conic-gradient(
+   #22c55e,
+   #3b82f6,
+   #9333ea,
+   #ec4899,
+   #22c55e
+  );
+ z-index:-1;
+ animation:spinAura 6s linear infinite;
+}
+
+/* glow pulse */
+#botAvatar::after{
+ content:"";
+ position:absolute;
+ inset:-8px;
+ border-radius:50%;
+ background:radial-gradient(circle,#3b82f666,transparent 70%);
+ z-index:-2;
+ animation:pulseAura 2.6s ease-out infinite;
+}
+
+@keyframes spinAura{
+ from{transform:rotate(0deg)}
+ to{transform:rotate(360deg)}
+}
+@keyframes pulseAura{
+ 0%{transform:scale(.85);opacity:.7}
+ 70%{transform:scale(1.5);opacity:0}
+ 100%{opacity:0}
+}
+
+/* ===== CHAT BODY FEEL ===== */
+.chat-body{
+ scroll-behavior:smooth;
+}
+
+/* ===== BUBBLE BOT LEBIH HIDUP ===== */
+.row.bot .bubble{
+ background:linear-gradient(180deg,#1e293b,#0f172a);
+ box-shadow:0 6px 20px #020617cc;
+}
+
+/* ===== BUBBLE USER PREMIUM ===== */
+.bubble.user{
+ box-shadow:0 10px 24px #2563eb44;
+}
+
+/* ===== TAP FEEL ===== */
+.bubble:active{
+ transform:scale(.97);
+}
+
+/* ===== SEND BUTTON GLOW ===== */
+.input-box button{
+ box-shadow:
+  0 6px 18px #2563eb66,
+  inset 0 0 0 1px #ffffff22;
+ transition:.25s;
+}
+.input-box button:active{
+ transform:scale(.9) rotate(-6deg);
+}
+
+/* ===== DRAWER GLASS ===== */
+.drawer{
+ background:rgba(2,6,23,.85);
+ backdrop-filter:blur(10px);
+}
+
+/* ===== MODEL CARD FLOAT ===== */
+.model-card:hover{
+ transform:translateY(-2px);
+ box-shadow:0 12px 24px #020617cc;
+}
+
+/* ===== OWNER CARD GLOW HALUS ===== */
+.owner-card{
+ box-shadow:0 10px 30px #020617cc;
+}
+
+/* ===== GALERI LEBIH MAHAL ===== */
+.char-gallery img{
+ background:#020617;
+ box-shadow:0 8px 18px #020617aa;
+}
+.char-gallery img:active{
+ transform:scale(.92);
+}
+
+/* ===== TOAST NAIK KELAS ===== */
+.toast.show{
+ box-shadow:0 12px 30px #2563eb44;
+}
+
+/* ===== STATUS ONLINE LEBIH HIDUP ===== */
+.status{
+ animation:statusBreath 2.5s ease-in-out infinite;
+}
+
+@keyframes statusBreath{
+ 0%,100%{opacity:.85}
+ 50%{opacity:1}
+}
+.row{
+ animation:rowIn .25s ease-out both;
+}
+
+@keyframes rowIn{
+ from{
+  opacity:0;
+  transform:translateY(8px);
+ }
+ to{
+  opacity:1;
+  transform:none;
+ }
+}
+
+.bubble{
+ animation:bubblePop .3s cubic-bezier(.3,1.4,.4,1);
+}
+
+@keyframes bubblePop{
+ 0%{
+  transform:scale(.9);
+  opacity:0;
+ }
+ 100%{
+  transform:scale(1);
+  opacity:1;
+ }
+}
+
+.row.bot .bubble{
+ animation:botBubble .35s ease-out;
+}
+
+@keyframes botBubble{
+ from{
+  opacity:0;
+  transform:translateX(-6px) scale(.95);
+ }
+ to{
+  opacity:1;
+  transform:none;
+ }
+}
+
+/* ===== ANIMASI GANTI MODEL ===== */
+.model-card{
+ transition:.25s;
+}
+
+.model-card:active{
+ transform:scale(.97);
+}
+
+.model-card.active{
+ animation:modelSelect .35s ease-out;
+}
+
+@keyframes modelSelect{
+ 0%{
+  box-shadow:0 0 0 0 #2563eb00;
+  transform:scale(.95);
+ }
+ 60%{
+  box-shadow:0 0 0 6px #2563eb33;
+ }
+ 100%{
+  box-shadow:0 0 0 1px #2563eb;
+  transform:none;
+ }
+}
+
+/* ===== HEADER ANIM ===== */
+#botAvatar,
+#botName{
+ transition:.25s;
+}
+
+.model-switching #botAvatar{
+ transform:scale(.85);
+ opacity:.3;
+}
+.model-switching #botName{
+ opacity:.3;
+}
+/* ===== ONLINE STATUS EFFECT ===== */
+/* ===== ONLINE STATUS FIX CENTER ===== */
+.status{
+ position:relative;
+ padding-left:18px;
+ font-weight:500;
+ color:#22c55e;
+ text-shadow:0 0 8px #22c55e55;
+}
+
+/* DOT */
+.status::before{
+ content:"";
+ position:absolute;
+ left:0;
+ top:50%;
+ width:8px;
+ height:8px;
+ background:#22c55e;
+ border-radius:50%;
+ transform:translateY(-50%);
+ box-shadow:0 0 10px #22c55e;
+ z-index:2;
+}
+
+/* PULSE (CENTER KE DOT) */
+.status::after{
+ content:"";
+ position:absolute;
+ left:4px;              /* ⬅ SETENGAH DARI WIDTH DOT */
+ top:50%;
+ width:8px;
+ height:8px;
+ border-radius:50%;
+ background:transparent;
+ transform:translate(-50%,-50%);
+ box-shadow:0 0 0 0 #22c55e66;
+ animation:onlinePulse 1.8s infinite;
+ z-index:1;
+}
+
+@keyframes onlinePulse{
+ 0%{
+  box-shadow:0 0 0 0 #22c55e66;
+ }
+ 70%{
+  box-shadow:0 0 0 10px transparent;
+ }
+ 100%{
+  box-shadow:0 0 0 0 transparent;
+ }
+}
+/* ===== BOT INFO POPUP ===== */
+.bot-info{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.6);
+ backdrop-filter:blur(6px);
+ display:none;
+ align-items:center;
+ justify-content:center;
+ z-index:80;
+}
+.bot-info.show{display:flex}
+
+.bot-info-box{
+ width:85%;
+ max-width:320px;
+ background:#020617;
+ border:1px solid #1e293b;
+ border-radius:20px;
+ padding:20px;
+ text-align:center;
+ animation:pop .3s ease-out;
+ box-shadow:0 0 40px #2563eb44;
+}
+
+.bot-info-box img{
+ width:90px;
+ height:90px;
+ border-radius:50%;
+ border:3px solid #2563eb;
+ margin-bottom:10px;
+}
+
+.bot-info-box h3{
+ margin-bottom:6px;
+}
+
+.bot-info-box p{
+ font-size:13px;
+ color:#cbd5f5;
+ line-height:1.5;
+ margin-bottom:14px;
+}
+
+.bot-info-box button{
+ width:100%;
+ padding:12px;
+ border-radius:14px;
+ background:linear-gradient(135deg,#2563eb,#3b82f6);
+ color:white;
+ cursor:pointer;
+}
+
+@keyframes pop{
+ from{transform:scale(.85);opacity:0}
+ to{transform:scale(1);opacity:1}
+}
+/*BOT HEADER CLICKABLE ===== */
+.bot-area{
+ cursor:pointer;
+}
+
+.bot-area:active{
+ transform:scale(.97);
+}

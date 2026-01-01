@@ -10,6 +10,17 @@
 </head>
 <body>
 
+<!-- ===== BOT INFO MODAL ===== -->
+<div class="bot-info" id="botInfo" onclick="closeBotInfo(event)">
+  <div class="bot-info-box">
+    <img id="botInfoAvatar">
+    <h3 id="botInfoName"></h3>
+    <p id="botInfoDesc"></p>
+    <button onclick="closeBotInfo()">Tutup</button>
+  </div>
+</div>
+
+
 <div class="bg-glow"></div>
 
 <div class="chat-app">
@@ -18,6 +29,8 @@
  <div class="header-left">
   <img id="botAvatar" src="kiss.jpg">
   <div>
+    
+    <div class="bot-area"></div>
    <b id="botName">Kashiwada-san</b>
    <div class="status">online</div>
   </div>
@@ -102,6 +115,20 @@
 </div>
  </div>
 
+<h4>Galeri Kashiwada-san</h4>
+<div class="char-gallery">
+ <img src="kiss.jpg" onclick="openPreview(this.src)">
+ <img src="kashiwada2.jpg" onclick="openPreview(this.src)">
+ <img src="kashiwada3.jpg" onclick="openPreview(this.src)">
+</div>
+
+<h4>Galeri Shiina Mahiru</h4>
+<div class="char-gallery">
+ <img src="mahiru.jpg" onclick="openPreview(this.src)">
+ <img src="mahiru2.jpg" onclick="openPreview(this.src)">
+ <img src="mahiru3.jpg" onclick="openPreview(this.src)">
+</div>
+
  <button class="close-btn" onclick="closeDrawer()">Tutup</button>
 </div>
 
@@ -120,12 +147,50 @@
   <button onclick="closeNotice()">Mengerti</button>
  </div>
 </div>
-
+<div class="gallery-preview" id="galleryPreview" onclick="closePreview()">
+ <img id="previewImg">
+</div>
 <script>
 const chat=document.getElementById("chat")
 const msg=document.getElementById("msg")
 
 /* ===== NOTICE LOGIC (AUTO CLOSE 5 DETIK) ===== */
+const botArea=document.querySelector(".bot-area")
+
+botArea.onclick=()=>{
+ const ai=AIs[current]
+ botInfoAvatar.src=ai.avatar
+ botInfoName.innerText=ai.name
+ botInfoDesc.innerText=ai.desc||ai.info
+ botInfo.classList.add("show")
+}
+const botInfo=document.getElementById("botInfo")
+const botInfoAvatar=document.getElementById("botInfoAvatar")
+const botInfoName=document.getElementById("botInfoName")
+const botInfoDesc=document.getElementById("botInfoDesc")
+
+botAvatar.onclick=()=>{
+ const ai=AIs[current]
+ botInfoAvatar.src=ai.avatar
+ botInfoName.innerText=ai.name
+ botInfoDesc.innerText=ai.desc||ai.info
+ botInfo.classList.add("show")
+}
+
+function closeBotInfo(e){
+ if(e && e.target!==botInfo) return
+ botInfo.classList.remove("show")
+}
+
+const galleryPreview=document.getElementById("galleryPreview")
+const previewImg=document.getElementById("previewImg")
+function openPreview(src){
+ previewImg.src=src
+ galleryPreview.classList.add("active")
+}
+function closePreview(){
+ galleryPreview.classList.remove("active")
+}
 const loginNotice=document.getElementById("loginNotice")
 if(!sessionStorage.getItem("noticeShown")){
  loginNotice.classList.add("show")
@@ -239,6 +304,8 @@ async function send(){
 }
 
 function setAI(k,el){
+ document.body.classList.add("model-switching")
+setTimeout(()=>document.body.classList.remove("model-switching"),200)
  current=k
  botName.innerText=AIs[k].name
  botAvatar.src=AIs[k].avatar
