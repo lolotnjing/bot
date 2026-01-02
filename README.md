@@ -10,7 +10,7 @@ BAGIAN FOTO BISA DI UBAH PAKE URL
         SEKIAN TERIMAKASIH 
         
         jangan hapus wm
-        
+             *PENUH FOTO BJIR, SOALNYA MALAS PAKE LINK*
         Author: Rafz
         Fitur?: Ai Web
         

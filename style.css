@@ -520,7 +520,7 @@ button:focus-visible{
 
 /* ===== GALERI LEBIH MAHAL ===== */
 .char-gallery img{
- background:#020617;
+ background: #020617;
  box-shadow:0 8px 18px #020617aa;
 }
 .char-gallery img:active{
@@ -736,10 +736,139 @@ button:focus-visible{
  to{transform:scale(1);opacity:1}
 }
 /*BOT HEADER CLICKABLE ===== */
-.bot-area{
+
+/* ===== SWIPE GALLERY 1 FRAME ===== */
+.char-swipe{
+ position:relative;
+ width:100%;
+ overflow:hidden;
+ border-radius:16px;
+ margin:12px 0;
+ border:1px solid #1e293b;
+ background:#020617;
+}
+
+.swipe-track{
+ display:flex;
+ transition:.35s ease;
+ touch-action:pan-y;
+}
+
+.swipe-track img{
+ min-width:100%;
+ aspect-ratio:1/1;
+ object-fit:cover;
+ user-select:none;
+}
+
+/* DOT */
+.swipe-dots{
+ display:flex;
+ justify-content:center;
+ gap:6px;
+ padding:8px 0;
+}
+
+.swipe-dots span{
+ width:6px;
+ height:6px;
+ border-radius:50%;
+ background:#475569;
+ transition:.25s;
+}
+
+.swipe-dots span.active{
+ background:#3b82f6;
+ box-shadow:0 0 8px #3b82f6;
+}
+.char-swipe{
+ position:relative;
+ width:100%;
+ overflow:hidden;
+ border-radius:16px;
+ margin:12px 0;
+ border:1px solid #1e293b;
+ background:#020617;
+}
+
+.swipe-track{
+ display:flex;
+ transition:.45s ease;
+ touch-action:pan-y;
+}
+
+.swipe-track img{
+ min-width:100%;
+ aspect-ratio:1/1;
+ object-fit:cover;
+ user-select:none;
+}
+
+/* DOT */
+.swipe-dots{
+ display:flex;
+ justify-content:center;
+ gap:6px;
+ padding:8px 0;
+}
+
+.swipe-dots span{
+ width:6px;
+ height:6px;
+ border-radius:50%;
+ background:#475569;
+ transition:.25s;
+}
+
+.swipe-dots span.active{
+ background:#3b82f6;
+ box-shadow:0 0 8px #3b82f6;
+}
+.char-group{
+ margin-bottom:20px;
+}
+
+.group-title{
+ font-size:14px;
+ margin:6px 4px;
+ color:#cbd5f5;
+ opacity:.9;
+}
+
+.char-group .swipe-track{
+ display:flex;
+ gap:10px;
+ overflow-x:auto;
+ scroll-snap-type:x mandatory;
+ padding-bottom:6px;
+}
+
+.char-group .swipe-track::-webkit-scrollbar{
+ height:4px;
+}
+.char-group .swipe-track::-webkit-scrollbar-thumb{
+ background:#334155;
+ border-radius:10px;
+}
+
+.img-box{
+ min-width:110px;
+ scroll-snap-align:start;
+ text-align:center;
  cursor:pointer;
 }
 
-.bot-area:active{
- transform:scale(.97);
+.img-box img{
+ width:100%;
+ height:130px;
+ object-fit:cover;
+ border-radius:14px;
+ box-shadow:0 6px 14px rgba(0,0,0,.4);
+}
+
+.img-box span{
+ display:block;
+ margin-top:4px;
+ font-size:12px;
+ opacity:.85;
 }

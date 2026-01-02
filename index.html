@@ -59,8 +59,17 @@
   <img src="mahiru.jpg"> Mahiru
  </div>
  <div class="model-card" onclick="setAI('felo',this)">
-  <img src="felo.jpg"> Felo <span class="badge-new">NEW</span>
+  <img src="felo.jpg"> Felo
  </div>
+ <div class="model-card" onclick="setAI('kauruko',this)">
+ <img src="kauruko.jpg"> Kauruko <span class="badge-new">NEW</span>
+</div>
+ <div class="model-card" onclick="setAI('ryo',this)">
+ <img src="ryo.jpg"> Ryoo <span class="badge-new">NEW</span>
+</div>
+<div class="model-card" onclick="setAI('chatgpt',this)">
+ <img src="chatgpt.jpg"> ChatGPT  <span class="badge-new">NEW</span>
+</div>
 
  <div class="model-info" id="modelInfo"></div>
  <div class="user-memory" id="userMemory"></div>
@@ -75,59 +84,28 @@
   <button class="save-profile" onclick="saveProfile()">Simpan Profil</button>
  </div>
 
- <!-- ===== INFO OWNER (TAMBAHAN) ===== -->
- <h3>Info Pengembang</h3>
- <div class="owner-card">
-  <div class="owner-head">
-   <img src="developer.jpg">
-   <div>
-     
-   </span>
-    <b>Rafz <span class="badge verified">
-    <i class="fa-solid fa-circle-check"></i> </b>
-   </div>
+<h4>Galeri</h4>
+ <div class="char-swipe">
+  <div class="swipe-track">
+    <img src="rimuru.jpg">
+    <img src="rimuru2.jpg">
+    <img src="rimuru3.jpg">
+
+    <img src="mahiru.jpg">
+    <img src="mahiru1.jpg">
+    <img src="mahiru2.jpg">
+    <img src="mahiru3.jpg">
+
+    <img src="kashiwada.jpg">
+    <img src="kashiwada2.jpg">
+    <img src="kashiwada3.jpg">
   </div>
-  
-  
-   <p><h5>
-   Multi AI Chat buatan orang gabut 
-   Hanya Untuk Experiment Dan Hiburan
-   </p></h5>
-   <p><h2>tqto</h2></p>
-   <p><h5>Acap Friends</h5></p>
-   <p><h5>Varhad Friends</h5></p>
-   <p><h5>Penyedia Api</h5></p>
-   
-  </p>
 
- <div class="owner-social">
-  <a href="https://wa.me/6281549426361" target="_blank" rel="noopener">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
-
-  <a href="https://www.youtube.com/@xyraa34k" target="_blank" rel="noopener">
-    <i class="fa-brands fa-youtube"></i>
-  </a>
-
-  <a href="https://nekopoi-care-rho.vercel.app/" target="_blank" rel="noopener">
-    <i class="fa-solid fa-globe"></i>
-  </a>
-</div>
- </div>
-
-<h4>Galeri Kashiwada-san</h4>
-<div class="char-gallery">
- <img src="kiss.jpg" onclick="openPreview(this.src)">
- <img src="kashiwada2.jpg" onclick="openPreview(this.src)">
- <img src="kashiwada3.jpg" onclick="openPreview(this.src)">
+  <!-- DOT KOSONG, DIISI JS -->
+  <div class="swipe-dots"></div>
 </div>
 
-<h4>Galeri Shiina Mahiru</h4>
-<div class="char-gallery">
- <img src="mahiru.jpg" onclick="openPreview(this.src)">
- <img src="mahiru2.jpg" onclick="openPreview(this.src)">
- <img src="mahiru3.jpg" onclick="openPreview(this.src)">
-</div>
+
 
  <button class="close-btn" onclick="closeDrawer()">Tutup</button>
 </div>
@@ -143,7 +121,21 @@
    Chat ini <b>bersifat sementara</b>.<br>
    Riwayat pesan akan hilang jika halaman ditutup atau direfresh.
   </p>
-  <p><b>Laporkan jika ada bug 🙏</b></p>
+  <b>Rafz <span class="badge verified">
+    <i class="fa-solid fa-circle-check"></i> </b>
+    <div class="owner-social">
+  <a href="https://wa.me/6281549426361" target="_blank" rel="noopener">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <a href="https://www.youtube.com/@xyraa34k" target="_blank" rel="noopener">
+    <i class="fa-brands fa-youtube"></i>
+  </a>
+
+  <a href="https://nekopoi-care-rho.vercel.app/" target="_blank" rel="noopener">
+    <i class="fa-solid fa-globe"></i>
+  </a>
+</div>
   <button onclick="closeNotice()">Mengerti</button>
  </div>
 </div>
@@ -155,6 +147,57 @@ const chat=document.getElementById("chat")
 const msg=document.getElementById("msg")
 
 /* ===== NOTICE LOGIC (AUTO CLOSE 5 DETIK) ===== */
+const track = document.querySelector(".swipe-track");
+const dotsWrap = document.querySelector(".swipe-dots");
+const slides = track.querySelectorAll("img");
+const total = slides.length;
+
+let index = 0;
+let startX = 0;
+let autoSlide;
+
+/* ===== BUAT DOT OTOMATIS ===== */
+slides.forEach((_,i)=>{
+ const dot = document.createElement("span");
+ if(i===0) dot.classList.add("active");
+ dotsWrap.appendChild(dot);
+});
+
+const dots = dotsWrap.querySelectorAll("span");
+
+/* ===== UPDATE ===== */
+function update(){
+ track.style.transform = `translateX(-${index * 100}%)`;
+ dots.forEach((d,i)=>d.classList.toggle("active",i===index));
+}
+
+/* ===== AUTO SLIDE ===== */
+function startAuto(){
+ autoSlide = setInterval(()=>{
+  index = (index + 1) % total;
+  update();
+ },3000);
+}
+function stopAuto(){
+ clearInterval(autoSlide);
+}
+startAuto();
+
+/* ===== SWIPE ===== */
+track.addEventListener("touchstart", e=>{
+ stopAuto();
+ startX = e.touches[0].clientX;
+});
+
+track.addEventListener("touchend", e=>{
+ let diff = startX - e.changedTouches[0].clientX;
+
+ if(diff > 50) index = (index + 1) % total;
+ if(diff < -50) index = (index - 1 + total) % total;
+
+ update();
+ startAuto();
+});
 const botArea=document.querySelector(".bot-area")
 
 botArea.onclick=()=>{
@@ -204,15 +247,15 @@ function closeNotice(){
 /* ===== FORMAT TEXT ===== */
 function formatText(t){
  return t
-  .replace(/</g,"&lt;").replace(/>/g,"&gt;")
+  .replace(/#{1,6}\s?/g,"") 
   .replace(/\*\*(.*?)\*\*/g,"$1")
-  .replace(/\*(.*?)\*/g,"$1")
-  .replace(/`([^`]+)`/g,"$1")
-  .replace(/\n/g,"<br>")
+  .replace(/\n{3,}/g,"\n\n")
+  .replace(/:\n-/g,":\n•")
+  .replace(/\n-/g,"\n•")
+  .replace(/\n\n/g,"<br><br>")
 }
-
 /* ===== USER ===== */
-let userName=localStorage.getItem("userName")||"Kamu"
+let userName=localStorage.getItem("userName")|| "kamu :"
 let userAvatar=localStorage.getItem("userAvatar")||"user.jpg"
 const userNameInput=document.getElementById("userNameInput")
 const userAvatarInput=document.getElementById("userAvatarInput")
@@ -262,7 +305,48 @@ const AIs={
  parse:d=>d.output},
  felo:{name:"Felo",avatar:"felo.jpg",info:"Santai & bebas",
  api:t=>`https://api.ryuu-dev.offc.my.id/ai/felo?text=${encodeURIComponent(t)}`,
- parse:d=>d.result||d.output||d.message}
+ parse:d=>d.result||d.output||d.message},
+ kauruko:{
+ name:"Kauruko Wuguri",
+ avatar:"kauruko.jpg",
+ info:"Tenang, anggun, lembut",
+ api:t=>{
+  const prompt = "Kamu adalah Kauruko Wuguri dari anime Kaoru Hana wa Rin to Saku. Kamu dikenal sebagai gadis yang tenang, kalem, dan lembut. Jawabanmu harus anggun, menenangkan, dan tidak pernah kasar."
+  return `https://api.siputzx.my.id/api/ai/gpt3?prompt=${encodeURIComponent(prompt)}&content=${encodeURIComponent(t)}`
+ },
+parse:d=>{
+ if(!d) return "…"
+ return d.data || d.result || d
+}
+},
+ryo:{
+ name:"Ryoo Yamada",
+ avatar:"ryo.jpg",
+ info:"Cuek",
+ api:t=>{
+  const prompt = "Kamu adalah Ryo Yamada dari anime Bocchi the Rock!. Kamu cewek cuek, misterius, dan kadang jawab seenaknya. Jawabanmu singkat dan kadang absurd."
+  return `https://api.siputzx.my.id/api/ai/gpt3?prompt=${encodeURIComponent(prompt)}&content=${encodeURIComponent(t)}`
+ },
+parse:d=>{
+ if(!d) return "…"
+ return d.data || d.result || d
+}
+},
+ chatgpt:{
+  name:"ChatGPT",
+  avatar:"chatgpt.jpg",
+  info:"AI serba bisa (Varhad API)",
+  api:t=>`https://api-varhad.my.id/ai/chatgpt?q=${encodeURIComponent(t)}`,
+  parse:d=>{
+   if(!d.status || !d.result) return "API ChatGPT error"
+
+   const msg=d.result.output?.find(o=>o.type==="message")
+   const text=msg?.content?.find(c=>c.type==="output_text")?.text
+
+   return text || "ChatGPT tidak merespon teks."
+  }
+ }
+ /*Model Di sini*/
 }
 let current="kashiwada"
 modelInfo.innerText=AIs[current].info
@@ -282,6 +366,7 @@ function add(role,text){
 async function send(){
  const t=msg.value.trim()
  if(!t) return
+
  add("user",t)
  msg.value=""
 
@@ -293,16 +378,31 @@ async function send(){
  chat.scrollTop=chat.scrollHeight
 
  try{
-  const r=await fetch(AIs[current].api(t))
-  const d=await r.json()
-  document.getElementById("typing").remove()
-  add("bot",formatText(AIs[current].parse(d)))
- }catch{
-  document.getElementById("typing").remove()
-  add("bot","Terjadi kesalahan")
+  const r = await fetch(AIs[current].api(t))
+  const d = await r.json()
+
+  document.getElementById("typing")?.remove()
+
+  let text
+  try{
+    text = AIs[current].parse(d)
+  }catch(e){
+    console.error("PARSE ERROR:", e, d)
+    text = "AI tidak bisa membaca respon."
+  }
+
+  if(!text || typeof text !== "string"){
+    text = "AI tidak memberi teks balasan."
+  }
+
+  add("bot", formatText(text))
+
+ }catch(err){
+  document.getElementById("typing")?.remove()
+  console.error("FETCH ERROR:", err)
+  add("bot","Terjadi kesalahan koneksi API.")
  }
 }
-
 function setAI(k,el){
  document.body.classList.add("model-switching")
 setTimeout(()=>document.body.classList.remove("model-switching"),200)
