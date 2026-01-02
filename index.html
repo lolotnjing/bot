@@ -88,16 +88,12 @@
  <div class="char-swipe">
   <div class="swipe-track">
     <img src="rimuru.jpg">
-    <img src="rimuru2.jpg">
     <img src="rimuru3.jpg">
 
     <img src="mahiru.jpg">
-    <img src="mahiru1.jpg">
-    <img src="mahiru2.jpg">
     <img src="mahiru3.jpg">
 
     <img src="kashiwada.jpg">
-    <img src="kashiwada2.jpg">
     <img src="kashiwada3.jpg">
   </div>
 
@@ -254,6 +250,37 @@ function formatText(t){
   .replace(/\n-/g,"\n•")
   .replace(/\n\n/g,"<br><br>")
 }
+function renderWithLinkPreview(text){
+ const urlRegex = /(https?:\/\/[^\s]+)/i
+ const match = text.match(urlRegex)
+
+ if(!match) return formatText(text)
+
+ const url = match[1]
+ let hostname
+
+ try{
+  hostname = new URL(url).hostname
+ }catch{
+  return formatText(text)
+ }
+
+ // favicon auto dari google
+ const favicon = `https://www.google.com/s2/favicons?domain=${hostname}&sz=128`
+
+ const cleanText = text.replace(url,"").trim()
+
+ return `
+  ${formatText(cleanText)}
+  <div class="link-preview" onclick="window.open('${url}','_blank')">
+   <img src="${favicon}" onerror="this.src='owner.jpg'">
+   <div class="lp-info">
+    <div class="lp-title">${hostname.replace('www.','')}</div>
+    <div class="lp-url">${url}</div>
+   </div>
+  </div>
+ `
+}
 /* ===== USER ===== */
 let userName=localStorage.getItem("userName")|| "kamu :"
 let userAvatar=localStorage.getItem("userAvatar")||"user.jpg"
@@ -395,7 +422,7 @@ async function send(){
     text = "AI tidak memberi teks balasan."
   }
 
-  add("bot", formatText(text))
+  add("bot", renderWithLinkPreview(text))
 
  }catch(err){
   document.getElementById("typing")?.remove()

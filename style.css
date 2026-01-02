@@ -872,3 +872,42 @@ button:focus-visible{
  font-size:12px;
  opacity:.85;
 }
+.link-preview{
+ margin-top:8px;
+ background:#0f172a;
+ border:1px solid rgba(255,255,255,.08);
+ border-radius:12px;
+ padding:10px;
+ display:flex;
+ gap:10px;
+ align-items:center;
+ cursor:pointer;
+ transition:.25s;
+}
+
+.link-preview:hover{
+ background:#111827;
+}
+
+.link-preview img{
+ width:40px;
+ height:40px;
+ border-radius:8px;
+ background:#000;
+ object-fit:cover;
+}
+
+.link-preview .lp-info{
+ display:flex;
+ flex-direction:column;
+}
+
+.link-preview .lp-title{
+ font-weight:600;
+ font-size:14px;
+}
+
+.link-preview .lp-url{
+ font-size:12px;
+ opacity:.6;
+}
